@@ -33,7 +33,7 @@ public class UserMethods implements PersistenceLayer{
 		}
 	}
 	public Connection getDbConnection()throws CustomException{
-		final String userId = "inc9";
+		final String userId = "root";
 		final String userPass= "Root@1234";
 		final String url= "jdbc:mysql://localhost/incubationdb";
 		try {
@@ -86,7 +86,7 @@ public class UserMethods implements PersistenceLayer{
 							ResultSet rSet = state.executeQuery();
 				ResultSetMetaData data = rSet.getMetaData();
 				if(data.getColumnCount()==0) {
-					throw new CustomException("INVALLID ACCOUNT NUMBER ENTERED");
+					throw new CustomException("INVALID USER ID ENTERED");
 				}else {
 					while(rSet.next()) {
 						pojoHelper.setUserId(rSet.getInt(1));
@@ -150,11 +150,12 @@ public class UserMethods implements PersistenceLayer{
 		}
 		return map;
 	}
-	public TransactionPojo insertIntoPojo (int userId,long acNo,String type,double amount,String status) {
+	public TransactionPojo insertIntoPojo (int userId,long acNo,long fomAcNo,String type,double amount,String status) {
 		TransactionPojo pojoHelper = new TransactionPojo();
 		pojoHelper.setUserId(userId);
 		pojoHelper.setAccountNumber(acNo);
 		pojoHelper.setTypeOfTransaction(type);
+		pojoHelper.setFromAccount(fomAcNo);
 		pojoHelper.setAmount(amount);
 		pojoHelper.setTransactionStatus(status);
 		long time = getTimeInMilli();
@@ -163,17 +164,18 @@ public class UserMethods implements PersistenceLayer{
 	}
 	public void insertTransaction(TransactionPojo pojoHelper) throws CustomException {
 		String insert = "INSERT INTO TRANSACTION_DETAILS "
-				+ "(USER_ID,ACCOUNT_NUMBER,TYPE,AMOUNT,STATUS,TIME) "
-				+ "VALUES(?,?,?,?,?,?)";
+				+ "(USER_ID,ACCOUNT_NUMBER,TYPE,FROM_ACCOUNT,AMOUNT,STATUS,TIME) "
+				+ "VALUES(?,?,?,?,?,?,?)";
 		try {
 			try  (Connection con = getDbConnection();
 					PreparedStatement state = con.prepareStatement(insert)){
 				state.setInt(1, pojoHelper.getUserId());
 				state.setLong(2, pojoHelper.getAccountNumber());
 				state.setString(3, pojoHelper.getTypeOfTransaction());
-				state.setDouble(4, pojoHelper.getAmount());
-				state.setString(5, pojoHelper.getTransactionStatus());
-				state.setLong(6,pojoHelper.getTimeOfTranstraction());
+				state.setLong(4, pojoHelper.getFromAccount());
+				state.setDouble(5, pojoHelper.getAmount());
+				state.setString(6, pojoHelper.getTransactionStatus());
+				state.setLong(7,pojoHelper.getTimeOfTranstraction());
 				state.execute();
 			}
 		}catch(SQLException e){
@@ -203,6 +205,7 @@ public class UserMethods implements PersistenceLayer{
 				state.setString(4, pojoHelper.getStatus());
 				long time = getTimeInMilli();
 				state.setLong(5,time);
+			//	state.setLong(6, pojoHelper.getUpdateTime());
 				state.execute();
 			}
 		}catch(SQLException e){
@@ -226,7 +229,7 @@ public class UserMethods implements PersistenceLayer{
 			try (Connection con = getDbConnection();
 					PreparedStatement state = con.prepareStatement(deposit)){
 				state.execute();				
-				TransactionPojo pojoHelper=insertIntoPojo(userId,accountNo, "CREDIT", amount, "SUCCESSFUL");
+				TransactionPojo pojoHelper=insertIntoPojo(userId,accountNo,accountNo, "CREDIT", amount, "SUCCESSFUL");
 				insertTransaction(pojoHelper);
 			}
 		}catch(SQLException e){
@@ -240,7 +243,7 @@ public class UserMethods implements PersistenceLayer{
 		return balance;
 	}
 	public void userWithdrawFailed(int userId,long accountNo,double amount) throws CustomException {
-		TransactionPojo pojoHelper = insertIntoPojo(userId,accountNo, "DEBIT", amount, "FAILED");
+		TransactionPojo pojoHelper = insertIntoPojo(userId,accountNo,accountNo, "DEBIT", amount, "FAILED");
 		insertTransaction(pojoHelper);
 	}
 	public void userWithdraw(int userId,long accountNo,double amount) throws CustomException {
@@ -249,7 +252,7 @@ public class UserMethods implements PersistenceLayer{
 			try (Connection con = getDbConnection();
 					PreparedStatement state = con.prepareStatement(withdraw)){
 				state.execute();
-				TransactionPojo pojoHelper=insertIntoPojo(userId,accountNo, "DEBIT", amount, "SUCCESSFUL");
+				TransactionPojo pojoHelper=insertIntoPojo(userId,accountNo,accountNo, "DEBIT", amount, "SUCCESSFUL");
 				insertTransaction(pojoHelper);
 			}
 		}catch(SQLException e){
@@ -296,7 +299,7 @@ public class UserMethods implements PersistenceLayer{
 				try (Connection con = getDbConnection();
 						PreparedStatement state = con.prepareStatement(deposit)){
 					state.execute();				
-					TransactionPojo pojoHelper = insertIntoPojo(toUserId,toAccount, "CREDIT", amount, "SUCCESSFUL");
+					TransactionPojo pojoHelper = insertIntoPojo(toUserId,toAccount,fromAccount, "CREDIT", amount, "SUCCESSFUL");
 					insertTransaction(pojoHelper);
 
 				}

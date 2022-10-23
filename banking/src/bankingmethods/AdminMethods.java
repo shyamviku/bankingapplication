@@ -2,16 +2,40 @@ package bankingmethods;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import bankingpojo.AccountPojo;
 import bankingpojo.CustomerPojo;
+import bankingpojo.UserPojo;
 import bankingpojo.WithdrawRequestPojo;
 import exceptionhandling.CustomException;
 
 public class AdminMethods extends UserMethods {
+	public UserPojo getAdminDetails(int adminId) throws  CustomException {
+		System.out.println("hi nnnn");
+		String query = "select * from user_details where user_id = "+adminId; 
+		UserPojo pojoHelper = new UserPojo();
+		try {	
+			try (Connection con = getDbConnection();
+				PreparedStatement state = con.prepareStatement(query);
+							ResultSet rSet = state.executeQuery()){
+					while(rSet.next()) {
+						pojoHelper.setUserId(rSet.getInt(1));
+						pojoHelper.setName(rSet.getString(3));
+						pojoHelper.setEmail(rSet.getString(4));
+						pojoHelper.setMobileNo(rSet.getLong(5));
+						pojoHelper.setRole(rSet.getString(6));
+					}
+						}
+			}
+		catch(SQLException e){
+			throw new CustomException("SQl Exception occurred",e);
+		}return pojoHelper;
+	}
 	public Map<Integer,WithdrawRequestPojo>  getRequests() throws CustomException {
 		Map<Integer,WithdrawRequestPojo> map = new HashMap<>();
 String request = "select * from WITHDRAW_REQUEST where status = 'PENDING'";
@@ -51,10 +75,11 @@ return map;
 		long accountNumber = helper.getAccountNumber();
 		double amount = helper.getAmount();
 		userWithdraw(userId,accountNumber,amount);
-		updateStatusRejected(reqNo);
+		updateStatusApproved(reqNo);
 	}
 	public void updateStatusApproved(int reqNo) throws CustomException {
-		String update = "UPDATE WITHDRAW_REQUEST SET STATUS = 'APPROVED' WHERE REQ_NUMBER = "+reqNo;
+		long updateTime = System.currentTimeMillis();
+		String update = "UPDATE WITHDRAW_REQUEST SET STATUS = 'APPROVED',UPDATE_TIME = "+updateTime+" WHERE REQ_NUMBER = "+reqNo;
 		try{
 			try (Connection con = getDbConnection();
 				PreparedStatement state = con.prepareStatement(update)){
@@ -65,7 +90,8 @@ return map;
 		}
 		}
 	public void updateStatusRejected(int reqNo) throws CustomException {
-		String update = "UPDATE WITHDRAW_REQUEST SET STATUS = 'REJECTED' WHERE REQ_NUMBER = "+reqNo;
+		long updateTime = System.currentTimeMillis();
+		String update = "UPDATE WITHDRAW_REQUEST SET STATUS = 'REJECTED',UPDATE_TIME = "+updateTime+" WHERE REQ_NUMBER = "+reqNo;
 		WithdrawRequestPojo helper=selectRequests(reqNo);
 		int userId = helper.getUserId();
 		long accountNumber = helper.getAccountNumber();

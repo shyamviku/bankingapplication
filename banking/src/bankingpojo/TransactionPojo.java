@@ -6,6 +6,7 @@ public class TransactionPojo {
 	private int transactionId;
 	private String typeOfTransaction;
 	double amount;
+	long fromAccount;
 	private long timeOfTranstraction;
 	private String transactionStatus;
 	public double getAmount() {
@@ -15,6 +16,12 @@ public class TransactionPojo {
 		this.amount = amount;
 	}
 	
+	public long getFromAccount() {
+		return fromAccount;
+	}
+	public void setFromAccount(long fromAccount) {
+		this.fromAccount = fromAccount;
+	}
 	public long getAccountNumber() {
 		return accountNumber;
 	}

@@ -7,6 +7,13 @@ public class WithdrawRequestPojo {
 	double amount;
 	String status;
 	long reqTime;
+	long updateTime;
+	public long getUpdateTime() {
+		return updateTime;
+	}
+	public void setUdateTime(long appprovalTime) {
+		this.updateTime = appprovalTime;
+	}
 	public int getReqNumber() {
 		return reqNumber;
 	}

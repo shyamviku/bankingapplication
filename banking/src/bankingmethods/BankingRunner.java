@@ -28,17 +28,17 @@ public class BankingRunner {
 			logger.info("Enter the password :");
 			String password = scan.next();
 			String authenticate = userHelper.userLogin(id,password);
-			Integer[] userId = new Integer[1];
-			userId[0]=id;
-			CustomerPojo pojoHelper = userHelper.getUserDetails(userId).get(id);
 			String role= "CUSTOMER";
 			if(authenticate.equals(role)) {
-				logger.info("WELCOME "+pojoHelper.getName());
-				logger.info("USER_ID :"+pojoHelper.getUserId() );
-				logger.info("NAME :"+pojoHelper.getName());
-				logger.info("EMAIL :"+pojoHelper.getEmail());
-				logger.info("MOBILE NUMBER :"+pojoHelper.getMobileNo());
-				logger.info("AADHAR ID :"+pojoHelper.getAadharId());
+				Integer[] userId = new Integer[1];
+				userId[0]=id;
+				CustomerPojo customerpojo = userHelper.getUserDetails(userId).get(id);
+			//	logger.info("WELCOME "+customerpojo.getName());
+				logger.info("USER_ID :"+customerpojo.getUserId() );
+				logger.info("NAME :"+customerpojo.getName());
+				logger.info("EMAIL :"+customerpojo.getEmail());
+				logger.info("MOBILE NUMBER :"+customerpojo.getMobileNo());
+				logger.info("AADHAR ID :"+customerpojo.getAadharId());
 
 
 				do {
@@ -128,7 +128,6 @@ public class BankingRunner {
 						double money = scan.nextDouble();
 						userHelper.userWithdrawRequest(id, acNo,money);
 						logger.info("withdraw request submitted");
-						logger.info("Deposit successful");
 						}else {
 							logger.info("ENTER VALID OPTION");
 
@@ -160,13 +159,18 @@ public class BankingRunner {
 					carryOn=scan.next();
 
 				}while(carryOn.equalsIgnoreCase("YES"));
+			
+				
+				
 			}else {
-				logger.info("WELCOME ADMIN :"+pojoHelper.getName());
-				logger.info("USER_ID :"+pojoHelper.getUserId() );
-				logger.info("NAME :"+pojoHelper.getName());
-				logger.info("EMAIL :"+pojoHelper.getEmail());
-				logger.info("MOBILE NUMBER :"+pojoHelper.getMobileNo());
-				logger.info("ROLE :"+pojoHelper.getRole());
+
+				UserPojo userPojo = adminHelper.getAdminDetails(id);
+				logger.info("WELCOME ADMIN :"+userPojo.getName());
+				logger.info("USER_ID :"+userPojo.getUserId() );
+				logger.info("NAME :"+userPojo.getName());
+				logger.info("EMAIL :"+userPojo.getEmail());
+				logger.info("MOBILE NUMBER :"+userPojo.getMobileNo());
+				logger.info("ROLE :"+userPojo.getRole());
 
 				do {
 					logger.info("\n1)SHOW REQUESTS \n"
