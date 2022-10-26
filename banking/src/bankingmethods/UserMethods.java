@@ -296,14 +296,12 @@ public class UserMethods implements PersistenceLayer{
 			int toUserId =AccountpojoHelper.getUserId();
 			userWithdraw(fromUserId,fromAccount,amount);
 			String deposit = "update account_details set balance = balance+"+amount+" where account_number = "+toAccount;
-			try{
+			
 				try (Connection con = getDbConnection();
 						PreparedStatement state = con.prepareStatement(deposit)){
 					state.execute();				
 					TransactionPojo pojoHelper = insertIntoPojo(toUserId,toAccount,fromAccount, "CREDIT", amount, "SUCCESSFUL");
 					insertTransaction(pojoHelper);
-
-				}
 			}catch(SQLException e){
 				throw new CustomException("SQl Exception occurred",e);
 			}	
@@ -320,7 +318,8 @@ public class UserMethods implements PersistenceLayer{
 	}
 	public void modifyUserDetails(int userId,String column,long mobile,String password,String email)throws CustomException {
 		String modify = "UPDATE USER_DETAILS SET "+column+" = ? WHERE USER_ID = "+userId;
-		try{try (Connection con = getDbConnection();
+		try{
+			try (Connection con = getDbConnection();
 				PreparedStatement state = con.prepareStatement(modify)){
 			if(column == "MOBILE") {
 				mobileValidation(mobile);
@@ -337,6 +336,19 @@ public class UserMethods implements PersistenceLayer{
 		}catch(SQLException e){
 			throw new CustomException("SQl Exception occurred",e);
 	}
+	}
+//	public void disableAccount (long acNo) throws CustomException {
+//		String query = "UPDATE ACCOUNT_DETAILS SET STATUS = 'INACTICE' WHERE ACCOUNT_NUMBER= "+acNo;
+//			try (Connection con = getDbConnection();
+//					PreparedStatement state = con.prepareStatement(query)){
+//				state.execute();
+//			}catch(SQLException e){
+//				throw new CustomException("SQl Exception occurred",e);
+//		}
+//	}
+	public void reqAccountActivate() {
+		String query = "INSERT INTO ACCOUNT_ACTIVATE_REQUEST (CUSTOMER_ID,REQ_NUMBER,ACCOUNT_NUMBER,STATUS,REQ_TIME,UPDATE_TIME) VALUES(,?,?,?,?,?)";
+	
 	}
 }
 

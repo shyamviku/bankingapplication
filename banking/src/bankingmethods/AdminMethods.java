@@ -2,8 +2,10 @@ package bankingmethods;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import bankingpojo.AccountPojo;
@@ -32,6 +34,39 @@ public class AdminMethods extends UserMethods {
 		catch(SQLException e){
 			throw new CustomException("SQl Exception occurred",e);
 		}return pojoHelper;
+	}
+	public Map<Integer,CustomerPojo> getUserDetails(Integer... userId) throws  CustomException {
+		CustomerPojo pojoHelper = new CustomerPojo();
+		Map<Integer,CustomerPojo> map = new LinkedHashMap<>();
+		
+		String query = "select user_details.user_id,user_details.name,user_details.email,user_details.mobile,customer_details.status,customer_details.aadhar_id,customer_details.pan_number,user_details.password from user_details join customer_details on user_details.user_id=customer_details.customer_id where customer_id = ?";
+		try {	
+			try (Connection con = getDbConnection();
+				PreparedStatement state = con.prepareStatement(query)){
+						for(Integer user:userId) {
+							state.setInt(1, user);
+							ResultSet rSet = state.executeQuery();
+				ResultSetMetaData data = rSet.getMetaData();
+				if(data.getColumnCount()==0) {
+					throw new CustomException("INVALID USER ID ENTERED");
+				}else {
+					while(rSet.next()) {
+						pojoHelper.setUserId(rSet.getInt(1));
+						pojoHelper.setName(rSet.getString(2));
+						pojoHelper.setEmail(rSet.getString(3));
+						pojoHelper.setMobileNo(rSet.getLong(4));
+						pojoHelper.setStatus(rSet.getString(5));
+						pojoHelper.setAadharId(rSet.getLong(6));
+						pojoHelper.setPanNumber(rSet.getString(7));
+						pojoHelper.setPassword(rSet.getString(8));
+						map.put(rSet.getInt(1), pojoHelper);
+					}	
+				}
+						}
+			}
+		}catch(SQLException e){
+			throw new CustomException("SQl Exception occurred",e);
+		}return map;
 	}
 	public Map<Integer,WithdrawRequestPojo>  getRequests() throws CustomException {
 		Map<Integer,WithdrawRequestPojo> map = new HashMap<>();
