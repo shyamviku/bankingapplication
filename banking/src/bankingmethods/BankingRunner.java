@@ -33,7 +33,7 @@ public class BankingRunner {
 				Integer[] userId = new Integer[1];
 				userId[0]=id;
 				CustomerPojo customerpojo = userHelper.getUserDetails(userId).get(id);
-			//	logger.info("WELCOME "+customerpojo.getName());
+				//	logger.info("WELCOME "+customerpojo.getName());
 				logger.info("USER_ID :"+customerpojo.getUserId() );
 				logger.info("NAME :"+customerpojo.getName());
 				logger.info("EMAIL :"+customerpojo.getEmail());
@@ -46,7 +46,8 @@ public class BankingRunner {
 							+ "2)BALANCE \n"
 							+ "3)DEPOSIT \n"
 							+ "4)WITHDRAW \n"
-							+ "5)TRANSFER");
+							+ "5)TRANSFER \n"
+							+ "6)MODIFY PERSONAL DETAILS");
 					logger.info("ENTER THE OPTION NO. YOU WANT TO PROCEED WITH :: ");
 					int option = scan.nextInt();
 					switch(option) {
@@ -62,7 +63,7 @@ public class BankingRunner {
 						logger.info("ENTER THE OPTION TO GET DETAILS");
 						int entry  = scan.nextInt();
 						if(entry<listLength+1) {
-						long acNo = list.get(entry-1);
+							long acNo = list.get(entry-1);
 							AccountPojo acPojoHelper = map1.get(acNo);
 							logger.info("ACCOUNT NO :"+acPojoHelper.getAccountNumber());
 							logger.info("ACCOUNT TYPE :"+acPojoHelper.getAccountType());
@@ -85,13 +86,13 @@ public class BankingRunner {
 						logger.info("ENTER THE ACCOUNT OPTION TO GET BALANCE");
 						int entry  = scan.nextInt();
 						if(entry<listLength+1) {
-						long acNo = list.get(entry-1);
-						double balance = userHelper.getBalance(id,acNo);
-						logger.info("THE BALANCE IS :"+balance);
+							long acNo = list.get(entry-1);
+							double balance = userHelper.getBalance(id,acNo);
+							logger.info("THE BALANCE IS :"+balance);
 						}else {
 							logger.info("ENTER VALID OPTION");
 
-					}break;
+						}break;
 					}
 					case 3:{
 						List<Long> list =userHelper.getUserAccounts(id);					
@@ -103,15 +104,15 @@ public class BankingRunner {
 						logger.info("ENTER THE ACCOUNT OPTION TO DEPOSIT");
 						int entry  = scan.nextInt();
 						if(entry<listLength+1) {
-						long acNo = list.get(entry-1);
-						logger.info("Enter the amount for deposit");
-						double money = scan.nextDouble();						
-						userHelper.userDeposit(id,acNo,money);
-						logger.info("Deposit successful");
+							long acNo = list.get(entry-1);
+							logger.info("Enter the amount for deposit");
+							double money = scan.nextDouble();						
+							userHelper.userDeposit(id,acNo,money);
+							logger.info("Deposit successful");
 						}else {
 							logger.info("ENTER VALID OPTION");
 
-					}break;
+						}break;
 					}
 					case 4:{
 						List<Long> list =userHelper.getUserAccounts(id);					
@@ -123,15 +124,15 @@ public class BankingRunner {
 						logger.info("ENTER THE ACCOUNT OPTION TO WITHDRAW");
 						int entry  = scan.nextInt();
 						if(entry<listLength+1) {
-						long acNo = list.get(entry-1);
-						logger.info("Enter the amount for withdraw");
-						double money = scan.nextDouble();
-						userHelper.userWithdrawRequest(id, acNo,money);
-						logger.info("withdraw request submitted");
+							long acNo = list.get(entry-1);
+							logger.info("Enter the amount for withdraw");
+							double money = scan.nextDouble();
+							userHelper.userWithdrawRequest(id, acNo,money);
+							logger.info("withdraw request submitted");
 						}else {
 							logger.info("ENTER VALID OPTION");
 
-					}break;
+						}break;
 					}
 					case 5:{
 						List<Long> list =userHelper.getUserAccounts(id);					
@@ -143,25 +144,57 @@ public class BankingRunner {
 						logger.info("ENTER THE ACCOUNT OPTION TO TRANSFER");
 						int entry  = scan.nextInt();
 						if(entry<listLength+1) {
-						long acNo = list.get(entry-1);
-						logger.info("Enter the sender's account number");
-						long toAcNo= scan.nextLong();
-						logger.info("Enter the amount to transfer");
-						double amount= scan.nextLong();
-						userHelper.moneytransfer(id, acNo, toAcNo, amount);
-					}else {
-						logger.info("ENTER VALID OPTION");
+							long acNo = list.get(entry-1);
+							logger.info("Enter the sender's account number");
+							long toAcNo= scan.nextLong();
+							logger.info("Enter the amount to transfer");
+							double amount= scan.nextLong();
+							userHelper.moneytransfer(id, acNo, toAcNo, amount);
+						}else {
+							logger.info("ENTER VALID OPTION");
 
-				}break;
+						}break;
+					}
+					case 6:{
+						logger.info(" SELECT ONE DETAIL TO MODIFY \n"
+								+ "1)MOBILE \n"
+								+ "2)EMAIL\n"
+								+ "3)PASSWORD");
+						int modOption = scan.nextInt();		
+						if(modOption==1) {
+							String column = "MOBILE";
+							logger.info("ENTER NEW MOBILE NUMBER");
+							long mobile=scan.nextLong();
+							userHelper.modifyUserDetails(id,column,mobile,customerpojo.getPassword(),customerpojo.getEmail());
+						}else if(modOption ==2) {
+							String column = "EMAIL";
+							logger.info("ENTER NEW EMAIL");
+							String mail = scan.next();
+							userHelper.modifyUserDetails(id,column,customerpojo.getMobileNo(),customerpojo.getPassword(),mail);
+						}else if(modOption==3) {
+							String column = "PASSWORD";
+							logger.info("ENTER OLD PASSWORD"); 
+							String oPass = scan.next();
+							logger.info("ENTER NEW PASSWORD"); 
+							String pass = scan.next();
+							if(oPass.equals(customerpojo.getPassword())) {
+								userHelper.modifyUserDetails(id,column,customerpojo.getMobileNo(),pass,customerpojo.getEmail());
+							}else {
+								System.out.println("OLD PASSWORD IS  WRONG");
+							}
+						}else {
+							System.out.println("ENTER PROPER OPTION");
+						}
+						break;
 					}
 					}
 					logger.info("----------DO YOU WANT TO CONTINUE WITH OTHER OPTIONS(yes/no)-----------");
 					carryOn=scan.next();
 
 				}while(carryOn.equalsIgnoreCase("YES"));
-			
-				
-				
+
+
+
 			}else {
 
 				UserPojo userPojo = adminHelper.getAdminDetails(id);
@@ -201,7 +234,7 @@ public class BankingRunner {
 							logger.info("Enter proper command");
 						}
 						break;
-						
+
 					}
 					case 2:{
 						logger.info("ENTER THE NAME OF THE NEW CUSTOMER");

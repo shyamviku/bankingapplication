@@ -77,7 +77,7 @@ public class UserMethods implements PersistenceLayer{
 		CustomerPojo pojoHelper = new CustomerPojo();
 		Map<Integer,CustomerPojo> map = new LinkedHashMap<>();
 		
-		String query = "select user_details.user_id,user_details.name,user_details.email,user_details.mobile,customer_details.status,customer_details.aadhar_id,customer_details.pan_number from user_details join customer_details on user_details.user_id=customer_details.customer_id where customer_id = ?";
+		String query = "select user_details.user_id,user_details.name,user_details.email,user_details.mobile,customer_details.status,customer_details.aadhar_id,customer_details.pan_number,user_details.password from user_details join customer_details on user_details.user_id=customer_details.customer_id where customer_id = ?";
 		try {	
 			try (Connection con = getDbConnection();
 				PreparedStatement state = con.prepareStatement(query)){
@@ -96,6 +96,7 @@ public class UserMethods implements PersistenceLayer{
 						pojoHelper.setStatus(rSet.getString(5));
 						pojoHelper.setAadharId(rSet.getLong(6));
 						pojoHelper.setPanNumber(rSet.getString(7));
+						pojoHelper.setPassword(rSet.getString(8));
 						map.put(rSet.getInt(1), pojoHelper);
 					}	
 				}
@@ -107,7 +108,7 @@ public class UserMethods implements PersistenceLayer{
 	}
 	public List<Long> getUserAccounts(int userId) throws CustomException{
 		List<Long> list = new ArrayList<Long>();
-		String query = " select account_number from account_details where customer_id ="+userId;
+		String query = " select account_number from account_details where customer_id ="+userId+" AND status='ACTIVE'";
 		try{ 
 			try (Connection con = getDbConnection();
 					PreparedStatement state = con.prepareStatement(query);
@@ -269,7 +270,7 @@ public class UserMethods implements PersistenceLayer{
 		}
 	}
 	public Map<Long,AccountPojo> checkToAccount(long accountNo) throws CustomException{
-		String query =  "select account_number,user_id from account_details where account_number= "+accountNo;
+		String query =  "select account_number,customer_id from account_details where account_number= "+accountNo+" AND status='ACTIVE'";
 		Map<Long,AccountPojo> map = new LinkedHashMap<>();
 		try{try (Connection con = getDbConnection();
 				PreparedStatement state = con.prepareStatement(query);
@@ -289,7 +290,7 @@ public class UserMethods implements PersistenceLayer{
 	public void moneytransfer(int fromUserId,long fromAccount,long toAccount,double amount) throws CustomException {
 		Map<Long,AccountPojo> map =checkToAccount(toAccount);
 		if(map.get(toAccount)==null) {
-			throw new CustomException("WRONG TO ACCOUNT ENTERED");
+			throw new CustomException("WRONG RECIEVER'S ACCOUNT NUMBER ENTERED OR IS INACTIVE");
 		}else {
 			AccountPojo AccountpojoHelper =map.get(toAccount);
 			int toUserId =AccountpojoHelper.getUserId();
@@ -308,5 +309,37 @@ public class UserMethods implements PersistenceLayer{
 			}	
 		}
 	}
+	public void mobileValidation(long mobile)throws CustomException {
+		String regex = "^\\d{10}$";
+		Pattern pattern = Pattern.compile(regex);
+		Matcher match = pattern.matcher(""+mobile);
+		boolean check = match.matches();
+		if(check==false) {
+			throw new CustomException("ENTER A VALID MOBILE NUMBER");
+		}
+	}
+	public void modifyUserDetails(int userId,String column,long mobile,String password,String email)throws CustomException {
+		String modify = "UPDATE USER_DETAILS SET "+column+" = ? WHERE USER_ID = "+userId;
+		try{try (Connection con = getDbConnection();
+				PreparedStatement state = con.prepareStatement(modify)){
+			if(column == "MOBILE") {
+				mobileValidation(mobile);
+				state.setLong(1, mobile);
+				state.executeUpdate();
+			}else if(column=="EMAIL") {
+				state.setString(1, email);
+				state.executeUpdate();
+			}else if(column=="PASSWORD") {	
+				state.setString(1, password);
+				state.executeUpdate();
+			}
+		}
+		}catch(SQLException e){
+			throw new CustomException("SQl Exception occurred",e);
+	}
+	}
 }
+
+		
+	
 

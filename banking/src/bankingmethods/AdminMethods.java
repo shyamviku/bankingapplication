@@ -2,10 +2,8 @@ package bankingmethods;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 import bankingpojo.AccountPojo;
@@ -16,7 +14,6 @@ import exceptionhandling.CustomException;
 
 public class AdminMethods extends UserMethods {
 	public UserPojo getAdminDetails(int adminId) throws  CustomException {
-		System.out.println("hi nnnn");
 		String query = "select * from user_details where user_id = "+adminId; 
 		UserPojo pojoHelper = new UserPojo();
 		try {	
