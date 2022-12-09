@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CUSTOMER PORTAL</title>
+<script src="https://kit.fontawesome.com/998f87dcd9.js"
+	crossorigin="anonymous"></script>
+</head>
+<link rel=stylesheet type=text/css href="../css/mainpage.css">
+<body class=mainpage>
+	<header>
+		<img class="loginlogo" alt="bank logo" src="../images/OIP.png">
+		<div class=logoutdropdown style="float: right">
+			<button class="dropbtn">
+				<i class="fa-solid fa-user"></i>
+			</button>
+			<div class="dropdown-content">
+				
+					
+					<div class=logobut>
+						<button id=userDetails name=button1>
+							<i class="fa-solid fa-id-card"></i>PROFILE
+						</button>
+					</div>
+					<div class=logobut>
+						<button id=changePass name=button1>
+							<i class="fa-solid fa-pen"></i>CHANGE PASSWORD
+						</button>
+					</div>
+				
+				
+					
+					<div class=logobut>
+						<button id=logout name=button1>
+							<i class="fa-solid fa-house-lock"></i>LOG OUT
+						</button>
+					</div>
+				
+			</div>
+		</div>
+	</header>
+	<div style=display:flex >
+	<div class="menuframe menu">
+	<div><h1 ></h1></div>
+
+<div><button id= myAccount name =button1 > <i class="fa-solid fa-house-chimney"></i>HOME</button></div>
+<div><button id= viewtransaction name =button1><i class="fa-solid fa-sheet-plastic"></i>TRANSACTIONS</button></div>
+<div><button id= withdrawRequest name =button1><i class="fa-solid fa-sack-dollar"></i>WITHDRAW</button></div>
+<div><button id= transfer name =button1><i class="fa-sharp fa-solid fa-people-arrows"></i>TRANSFER</button></div>
+<div><button id= deposit name =button1><i class="fa-sharp fa-solid fa-money-bill-trend-up"></i>DEPOSIT</button></div>
+<div><button id= accountManipulate name =button1><i class="fa-solid fa-headset"></i>ACTIVATION</button></div></div>
+	<div class=mainframe
+		 name=customer> </div>
+		</div>
+		<script src="http://code.jquery.com/jquery-1.6.2.min.js"></script>
+		<script>
+		
+		window.onload=function(){
+			$("#myAccount").click();
+			}
+		$(document).ready(function(){
+			
+			$("#myAccount").click(function (){
+				$(".mainframe").load("myAccount.html");
+			});
+			$("#deposit").click(function(){
+				$(".mainframe").load("deposit.html");
+			});
+			$("#transfer").click(function(){
+				$(".mainframe").load("transfer.html");
+			});
+			$("#withdrawRequest").click(function(){
+				$(".mainframe").load("withdrawRequest.html");
+			});
+			$("#accountManipulate").click(function(){
+				$(".mainframe").load("accountManipulate.html");
+			});
+			$("#viewtransaction").click(function(){
+				$(".mainframe").load("viewTransaction.html");
+			});
+			$("#logout").click(function(){
+				var obj={"button":"logout"};
+				console.log(obj);
+							var myJSON =JSON.stringify(obj);
+							$.ajax({
+								type:"POST",
+								url:"../BankServlet",
+								data:myJSON,
+								success:function(){
+								location.href="loginajax.html";
+								}
+							});
+			});
+			$("#changePass").click(function(){
+				$(".mainframe").load("changePassword.html");
+			});
+			$("#userDetails").click(function(){
+				$(".mainframe").load("userDetails.html");
+			});
+			
+			})
+		</script>
+</body>
+</html>

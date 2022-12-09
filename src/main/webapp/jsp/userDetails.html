@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<link rel=stylesheet type=text/css href="../css/mainpage.css">
+<body>
+	<header>
+		<p CLASS=topic>PROFILE</p>
+	</header>
+	<table class=contenttable>
+
+	</table>
+	<div class=savebutton>
+		<BUTTON CLASS="actionbutton " onclick=b() id=save
+			>SAVE</BUTTON>
+	</div>
+	<script src="http://code.jquery.com/jquery-1.6.2.min.js"></script>
+	<script>
+			$(document).ready(
+				function() {
+
+					var obj = {
+						"button" : "userDetails","userid": $("#userid").val()
+					};
+					var myJSON = JSON.stringify(obj);
+
+					$.ajax({
+						type : "POST",
+						url : "../BankServlet",
+						data : myJSON,
+						success : function(response) {
+							var json = JSON.parse(response);
+							console.log(json);
+								$(".contenttable").append(
+										"<tr><td>NAME</td><td>" + json.name + "</td></tr> "
+										+"<tr><td>USER ID</td><td>" + json.userId + "</td></tr>"
+										+"<tr><td>MOBILE</td><td><input style=background:transparent; type=tel value="+json.mobileNo+""
+											+" id=mobile /> </td></tr>"
+										+"<tr><td>EMAIL</td><td><input style=background:transparent;  type=email value="+json.email+""
+										+" id=email /></td></tr>"
+										+"<tr><td>AADHAR</td><td>" + json.aadharId + "</td></tr>"
+										+"<tr><td>PAN NUMBER</td><td>" + json.panNumber + "</td></tr>")
+								},
+						error : function() {
+							alert("error")
+						}
+					});
+				});
+			function b(){
+				var obj = {
+						"button" : "savecustomerdetails","mobile" : $("#mobile").val(), "email" : $("#email").val()
+					};
+					var myJSON = JSON.stringify(obj);
+				$.ajax({
+				type : "POST",
+				url : "../BankServlet",
+				data : myJSON,
+				success : function(response) {
+					var json = JSON.parse(response);
+					console.log(json);
+						},
+				error : function() {
+					alert("error")
+				}
+			});
+			}
+			</script>
+</body>
+</html>

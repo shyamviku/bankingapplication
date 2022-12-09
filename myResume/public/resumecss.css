@@ -1,0 +1,100 @@
+@charset "ISO-8859-1";
+body{
+
+		height:100vh;
+		}
+.heading {
+	background: powderblue;
+    width: 100%;
+    text-align: center;
+    height: 80px;
+    margin-top: -15px;
+	
+}
+body{
+	background-attachment: fixed;
+	margin:0px;
+	padding:0px;
+	border:none;
+	overflow-x:hidden;
+}
+.bold{
+	font-weight:bold;
+	
+}
+img{
+	width: 70%;
+    border-radius: 5em;
+    margin-left: 14.9%;
+    margin-top: 3%;
+    border: 1px solid;
+}
+.maindiv {
+	display: flex;
+	flex-direction: row;
+	border:2px solid black;
+	width: 100%;
+	background:#c5dae2;
+}
+
+.leftdiv {
+	height: 100%;
+	width: 19%;
+	display: flex;
+	flex-direction: column;
+	
+}
+
+.rightdiv {
+	height:100%;
+	width: 81%;
+	display: flex;
+	flex-direction: column;
+	font-size: 130%;
+	border-left:2px solid black;
+}
+
+.contenttable {
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 2%;
+	border-radius: 5px;
+	font-weight: normal;
+	border: 2px solid black;
+	width: 75%;
+	border-collapse: collapse;
+	max-width: 100%;
+	background-color: powderblue;
+	border-radius: 5px;
+}
+
+.contenttable td, th {
+	text-align: center;
+	padding: 8px;
+}
+
+.contenttable td {
+	
+	font-size: 15px;
+}
+
+.contenttable th {
+	color: black;
+	background: powderblue;
+	font-size:80%;
+}
+
+.contenttable tr:nth-child(odd) {
+	color: black;
+	background: powderblue;
+}
+
+.contenttable tr:nth-of-type(even) {
+	background: #F8F8F8;
+}
+.topic{
+	margin-left:7%;
+}
+.lefttopic{
+	margin-left:2%;
+}

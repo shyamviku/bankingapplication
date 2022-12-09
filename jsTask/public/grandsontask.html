@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+<style>
+</style>
+</head>
+<body>
+	<div id=write>
+		<P id=start>
+			ENTER THE NO. OF PAIRS<input type="number" id="pairs" required />
+			<button onclick="generatePairs();">GENERATE</button>
+		</P>
+	</div>
+	<div id=read>
+		<p id=count></p>
+	</div>
+	<script type="text/javascript">
+	var pairs;
+	function generatePairs(){
+		pairs = document.getElementById("pairs").value;
+	var writeDiv=document.getElementById("write");
+	for(var i=0;i<pairs;i++){
+		var inputDiv=document.createElement("div");
+		inputDiv.setAttribute("class","indiv");
+		writeDiv.append(inputDiv);
+		var parentInput= document.createElement("input");
+		parentInput.setAttribute("class","parent");
+		parentInput.setAttribute("type","text");
+		parentInput.required=true;
+		parentInput.setAttribute("placeholder","parent");
+		var childInput= document.createElement("input");
+		childInput.setAttribute("class","child");
+		childInput.setAttribute("type","text");
+		childInput.required=true;
+		childInput.setAttribute("placeholder","child");
+		inputDiv.append(parentInput,childInput);
+	}
+	var addButton=document.createElement("button");
+	addButton.setAttribute("onclick","addPairs()");
+	addButton.innerText="ADD";
+	var beforeDiv=document.getElementById("read");
+	writeDiv.append(addButton);
+	}
+	var familyTree ; 
+	function addPairs(){
+		familyTree=new Map();
+		var parents=document.getElementsByClassName("parent");
+		var children=document.getElementsByClassName("child");
+		
+		for(var i=0;i<pairs;i++){
+			var myKids=familyTree.get(parents[i].value);
+			if(!myKids){
+				myKids = [];
+				familyTree.set(parents[i].value,myKids);
+			}
+			if(myKids.contains(children[i].value)==false){
+			myKids.push(children[i].value);
+			}
+		}
+		if(parents[0].value ){
+			var readDiv=document.getElementById("read");
+			var grandparent= document.createElement("input");
+			grandparent.setAttribute("id","name");
+			grandparent.setAttribute("type","text");
+			grandparent.required=true;
+			grandparent.setAttribute("placeholder","grandparent");
+			var search=document.createElement("button");
+			search.innerText="search";
+			search.setAttribute("onclick","getInputValue()");
+			readDiv.prepend(grandparent,search);
+		}
+	}
+	function getInputValue() {
+		var message;
+		var name = document.getElementById("name").value;
+		//document.write(name);
+		var list = [];
+		var finalList = [];
+		var count = 0;
+		list = familyTree.get(name);
+		
+		if (list) {
+			for (var item : list) {
+				var grandchild = familyTree.get(item);
+				if (!grandchild) {
+					continue;
+				}
+				count = count + grandchild.length;
+				console.log(grandchild);
+				finalList.push(grandchild);
+			}
+			if (count == 0) {
+				message = "person does not have grandchildren";
+			} else {
+				message = count + " grandchildrens are :" + finalList;
+
+			}
+		} else {
+			message = "not a valid name";
+		}
+		document.getElementById("count").innerHTML = message;
+	}
+		
+	</script>
+</body>
+</html>

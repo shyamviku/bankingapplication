@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<link rel=stylesheet type=text/css
+	href="../css/mainpage.css">
+<body>
+<header>
+<p CLASS=topic>TRANSFER</p>
+</header>
+<TABLE class=centertable>
+<tr>
+<th>FROM ACCOUNT</th> 
+<td><select CLASS=dropdownbox id=select required> 
+</select></td>
+<tr>
+<th>AMOUNT</th><td><input required TYPE="number" id=amount></td>
+</tr>
+<tr>
+<th>TO ACCOUNT</th><td><input TYPE="number" id=toaccount></td>
+</tr>
+<tr>
+<td></td><td><input class=actionbutton onclick= b() type="submit" value="TRANSFER"/></td>
+</tr>
+</TABLE>
+<script src="http://code.jquery.com/jquery-1.6.2.min.js"></script>
+	<script>
+	
+		$(document).ready(
+				function() {
+					var obj = {
+						"button" : "viewTransaction"
+					};
+					var myJSON = JSON.stringify(obj);
+
+					$.ajax({
+						type : "POST",
+						url : "../BankServlet",
+						data : myJSON,
+						success:function(response) {
+							var json = JSON.parse(response);
+							for(k in json.list){
+								$(".dropdownbox").append("<option value="+json.list[k]+">"+json.list[k]+"</option>");}
+							},
+						error : function() {
+							alert("error")
+						}
+					});
+				});
+		function b(){
+			var obj = {
+					"acno" : $("#select").val(),"toac" : $("#toaccount").val(),"amount" : $("#amount").val(),"button" : "transfer"
+				};
+			var myJSON = JSON.stringify(obj);
+			$.ajax({
+				type : "POST",
+				url : "../BankServlet",
+				data : myJSON
+			})
+		}
+		</script>
+</body>
+</html>

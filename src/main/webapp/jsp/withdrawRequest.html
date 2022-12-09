@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<link rel=stylesheet type=text/css href="../css/mainpage.css">
+<body>
+<header>
+<p CLASS=topic>WITHDRAW</p>
+</header>
+<table class=centertable>
+<tr>
+<th><label>ACCOUNT</label></th>  
+<td><select id=select class=dropdownbox  required> 
+</select></td>
+</tr>
+<tr>
+<th><label>AMOUNT</label></th>
+<td><input required TYPE="number" min=1 id=amount></td>
+</tr>
+<tr><td></td>
+<td><button class=actionbutton type="submit" value="REQUEST WITHDRAW" onclick=b()>WITHDRAW</button></td>
+</tr>
+</table>
+<div align=center id=messagediv></div>
+<script src="http://code.jquery.com/jquery-1.6.2.min.js"></script>
+	<script>
+	
+		$(document).ready(
+				function() {
+					var obj = {
+						"button" : "viewTransaction"
+					};
+					var myJSON = JSON.stringify(obj);
+
+					$.ajax({
+						type : "POST",
+						url : "../BankServlet",
+						data : myJSON,
+						success:function(response) {
+							var json = JSON.parse(response);
+							for(k in json.list){
+								$(".dropdownbox").append("<option value="+json.list[k]+">"+json.list[k]+"</option>");}
+							},
+						error : function() {
+							alert("error")
+						}
+					});
+				});
+		function b(){
+			var obj = {
+					"acno" : $("#select").val(),"amount" : $("#amount").val(),"button" : "REQUEST WITHDRAW"
+				};
+			var myJSON = JSON.stringify(obj);
+			$.ajax({
+				type : "POST",
+				url : "../BankServlet",
+				data : myJSON,
+				success:function(response) {
+					var json = JSON.parse(response);
+					console.log(json)
+					if(json.success){
+						$("#messagediv").empty();
+						$("#messagediv").append("<span  id=success></span>");
+								$("#success").append(json["success"]);
+					}else{
+						$("#messagediv").empty();
+						$("#messagediv").append("<span  id=error></span>");
+								$("#error").append(json["error"]);
+					}
+				}
+			})
+		}
+		</script>
+</body>
+</html>

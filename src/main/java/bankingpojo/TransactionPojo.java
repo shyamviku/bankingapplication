@@ -1,0 +1,69 @@
+package bankingpojo;
+
+public class TransactionPojo {
+	private int userId;
+	private long accountNumber;
+	private int transactionId;
+	private String typeOfTransaction;
+	double amount;
+	long fromAccount;
+	private long timeOfTranstaction;
+	private String transactionStatus;
+	private double closingBalance;
+	public double getClosingBalance() {
+		return closingBalance;
+	}
+	public void setClosingBalance(double closingBalance) {
+		this.closingBalance = closingBalance;
+	}
+	public double getAmount() {
+		return amount;
+	}
+	public void setAmount(double amount) {
+		this.amount = amount;
+	}
+	
+	public long getFromAccount() {
+		return fromAccount;
+	}
+	public void setFromAccount(long fromAccount) {
+		this.fromAccount = fromAccount;
+	}
+	public long getAccountNumber() {
+		return accountNumber;
+	}
+	public void setAccountNumber(long accountNumber) {
+		this.accountNumber = accountNumber;
+	}
+	public int getTransactionId() {
+		return transactionId;
+	}
+	public void setTransactionId(int transactionId) {
+		this.transactionId = transactionId;
+	}
+	public String getTypeOfTransaction() {
+		return typeOfTransaction;
+	}
+	public void setTypeOfTransaction(String typeOfTransaction) {
+		this.typeOfTransaction = typeOfTransaction;
+	}
+	public long getTimeOfTransaction() {
+		return timeOfTranstaction;
+	}
+	public void setTimeOfTransaction(long timeOfTranstraction) {
+		this.timeOfTranstaction = timeOfTranstraction;
+	}
+	public String getTransactionStatus() {
+		return transactionStatus;
+	}
+	public void setTransactionStatus(String transactionStatus) {
+		this.transactionStatus = transactionStatus;
+	}
+	public int getUserId() {
+		return userId;
+	}
+	public void setUserId(int userId) {
+		this.userId = userId;
+	}
+	
+}

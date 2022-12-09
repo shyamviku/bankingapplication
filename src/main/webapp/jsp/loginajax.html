@@ -1,0 +1,53 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="UTF-8">
+<title>ZOHO INTERNATIONAL BANK</title>
+<link rel=stylesheet type=text/css href="../css/mainpage.css">
+</head>
+<body class=mainpage>
+<img class = "loginlogo" alt="zoho" src="../images/OIP.png">
+<p class=logintitle align=center >ZOHO INTERNATIONAL BANK</p>
+<div id=container>
+
+<table class=centertable>
+<tr>
+<td>USER ID</td><td><input class=logininput id=userid type="number"></input></td>
+</tr>
+<tr>
+<td>PASSWORD</td><td><input class=logininput id=pwd type="password"></input></td>
+</tr>
+<tr>
+<td></td>
+<td><button class=actionbutton onclick=login()>LOGIN</button></td>
+</tr>
+</table>
+<div align=center id=messagediv></div>
+</div>
+<script src="http://code.jquery.com/jquery-1.6.2.min.js"></script>
+	<script>
+	function login(){
+		var obj={"button":"login",userid:$("#userid").val(),pwd:$("#pwd").val()};
+		var myJSON =JSON.stringify(obj);
+		$.ajax({
+			type:"POST",
+			url:"../BankServlet",
+			data:myJSON,
+			success:function(response){
+				var json=JSON.parse(response);
+				var url=json["url"];
+				if(url){
+					location.href=url;
+				}
+				$("#messagediv").empty();
+					$("#messagediv").append("<span  id=error></span>");
+							$("#error").append(json["error"]);
+			},
+			error:function(){
+				alert("error")
+			}		
+		});
+	}
+	</script>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<link rel=stylesheet type=text/css
+	href="../css/mainpage.css">
+<body>
+	<header>
+		<p CLASS=topic>ACCOUNT ACTIVATION</p>
+	</header>
+	<table class=centertable>
+		
+			<tr>
+				<th>ACCOUNT DEACTIVATE</th>
+				<td><select required class=dropdownbox id=select1>
+				</select> <input class=actionbutton onclick="b('DEACTIVATE')" TYPE="submit" /></td>
+			</tr>
+		<tr>
+			<th>ACCOUNT ACTIVATE</th>
+			<td><select required class=dropdownbox id=select2>
+			</select> <input class=actionbutton onclick="b('ACTIVATE')"  TYPE="submit" /></td>
+		</tr>
+	
+	</table>
+	<script src="http://code.jquery.com/jquery-1.6.2.min.js"></script>
+	<script>
+	
+		$(document).ready(
+				function() {
+					var obj = {
+						"button" : "accountManipulate"
+					};
+					var myJSON = JSON.stringify(obj);
+					
+					$.ajax({
+					
+						type : "POST",
+						
+						url : "../BankServlet",
+						data : myJSON,
+						success:function(response) {
+							var json = JSON.parse(response);
+							console.log(json);
+							
+							for(k in json.list1){
+								$("#select1").append("<option value="+json.list1[k]+">"+json.list1[k]+"</option>");}
+					
+							
+							for(k in json.list2){
+								$("#select2").append("<option value="+json.list2[k]+">"+json.list2[k]+"</option>");}
+							
+							},
+						error : function() {
+							alert("error")
+						}
+					});
+				});
+		function b(action){
+			if (action==='DEACTIVATE'){
+			var obj = {
+					"acno" : $("#select1").val(),"button" : "DEACTIVATE"
+				};
+			var myJSON = JSON.stringify(obj);
+			$.ajax({
+				type : "POST",
+				url : "../BankServlet",
+				data : myJSON
+			})
+			}else {
+				var obj = {
+						"acno" : $("#select2").val(),"button" : "ACTIVATE"
+					};
+				var myJSON = JSON.stringify(obj);
+				$.ajax({
+					type : "POST",
+					url : "../BankServlet",
+					data : myJSON
+				})
+			}
+		}
+		</script>
+</body>
+</html>

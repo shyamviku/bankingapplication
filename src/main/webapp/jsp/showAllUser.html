@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title></title>
+</head>
+<link rel=stylesheet type=text/css href="</css/mainpage.css">
+<body>
+<table class=contenttable>
+<tr>
+<th>ID</th>
+<th>NAME</th>
+<th>EMAIL</th>
+<th>MOBILE</th>
+<th>STATUS</th>
+<th>AADHAR</th>
+<th>PAN</th>
+</tr>
+</table>
+<script src="http://code.jquery.com/jquery-1.6.2.min.js"></script>
+	<script>
+		$(document).ready(
+				function() {
+
+					var obj = {
+						"button" : "showAllCustomers"
+					};
+					var myJSON = JSON.stringify(obj);
+
+					$.ajax({
+						type : "POST",
+						url : "../BankServlet",
+						data : myJSON,
+						success : function(response) {
+							var json = JSON.parse(response);
+							console.log(json);
+							for (k in json) {
+								$(".contenttable").append(
+										"<tr><td>" + k
+												+ "</td><td>" + json[k].name + "</td><td>"
+												+ json[k].email
+												+ "</td><td>"
+												+ json[k].mobileNo
+												+ "</td><td>"
+												+ json[k].status
+												+ "</td><td>"
+												+ json[k].aadharId
+												+ "</td><td>"
+												+ json[k].panNumber
+												+ "</td></tr> ")
+							}
+						},
+						error : function() {
+							alert("error")
+						}
+					});
+				});
+	</script>
+</body>
+</html>

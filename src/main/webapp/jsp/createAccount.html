@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<link rel=stylesheet type=text/css href="../css/mainpage.css">
+<body>
+<header>
+<p CLASS=topic>ADD ACCOUNT</p>
+</header>
+<div class=centerdiv>
+<div CLASS=inputbox>
+<input type=number max=2147483647 autocomplete=off required id=userId >
+<span>CUSTOMER ID</span>
+</div>		
+<div CLASS=inputbox>
+<input TYPE="text" id=type required  autocomplete=off oninput="this.value = this.value.toUpperCase()">
+<span>TYPE</span>
+</div>		
+<div CLASS=inputbox>
+<input TYPE="text" id=branch required autocomplete=off oninput="this.value = this.value.toUpperCase()">
+<span>BRANCH</span>
+</div>		
+<div CLASS=inputbox>
+<input TYPE="NUMBER" autocomplete=off id=deposit min=500 max=1000000 required>
+<span>INITIAL DEPOSIT</span>
+</div>					
+<DIV><input class=actionbutton autocomplete=off type="submit" value="CREATE ACCOUNT" name=button></DIV>
+	</div>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script>
+	$(".actionbutton").onclick(function(){
+		var obj ={"userId":$("#userId").val(),"type":$("#type").val(),"branch":$("#branch").val(),"deposit":$("#deposit").val(),"button":"CREATE ACCOUNT"};
+	var json = JSON.stringify(obj);
+	$.ajax({
+		type : "POST",
+		url : "../BankServlet",
+		data : json,
+		success:function(response) {
+		}
+	});	
+	});
+	</script>
+</body>
+</html>

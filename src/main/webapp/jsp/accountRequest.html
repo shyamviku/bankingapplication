@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://kit.fontawesome.com/998f87dcd9.js" crossorigin="anonymous"></script>
+
+<meta charset="ISO-8859-1">
+<title>REQUESTS</title>
+</head>
+<link rel=stylesheet type=text/css
+	href="../css/mainpage.css">
+<body>
+<header>
+<p CLASS=topic>ACTIVATION REQUESTS</p>
+</header>
+
+<table class="contenttable ${hide}">
+<tr>
+<th>ID</th>
+<th>USER ID</th>
+<th>ACCOUNT NUMBER</th>
+<th>REQUEST</th>
+<th>TIME</th>
+<th>SELECT</th>
+</tr>
+</table>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script>
+	
+		$(document).ready(
+				function() {
+				
+					var obj = {
+						"button" : "activateRequest"
+					};
+					var myJSON = JSON.stringify(obj);
+
+					$.ajax({
+						type : "POST",
+						url : "../BankServlet",
+						data : myJSON,
+						success:function(response) {
+							var json = JSON.parse(response);
+							console.log(json);
+							for(k in json){
+								var date = new Date(json[k].reqTime);
+								var time=date.toLocaleString(); 
+								$(".contenttable").append(
+										 "<tr ><td id='reqno'>" + k + "</td><td>"
+												+ json[k].userId
+												+ "</td><td>"
+												+ json[k].acNo
+												+ "</td><td>"
+												+ json[k].type
+												+ "</td><td> "
+												+ time
+												+ "</td><td> "
+												+"<button class=accept id=button value=accept onclick=b("+k+","+"'accept'"+")><i class='fa-solid fa-check'></i></button>"
+												+"<button class=decline id=button value=deny onclick=b("+k+","+"'deny'"+")><i class='fa-solid fa-x'></i></button>"
+												+ "</td></tr> ")	
+							}
+							
+						},
+						error : function() {
+							alert("error")
+						}
+					});
+				});
+		
+		function b(action,value){
+			if(value==="accept"){
+				var obj = {
+					"reqno" : action,"button" : "acceptActivation"
+			}}else{
+				var obj = {
+					"reqno" : action,"button" : "denyActivation"
+			}}	
+			var myJSON = JSON.stringify(obj);
+			$.ajax({
+				type : "POST",
+				url : "../BankServlet",
+				data : myJSON,
+				success : function(response) {
+					$(".mainframe").load("accountRequest.html");
+				},
+		});
+		};	</script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<link rel=stylesheet type=text/css
+	href="../css/mainpage.css">
+<body>
+	<header>
+		<p CLASS=topic>ADD CUSTOMER</p>
+	</header>
+	
+	
+		<div class=centerdiv>
+			<div class=inputbox>
+				<input autocomplete=off required TYPE="text" id=name
+					oninput="this.value = this.value.toUpperCase()" /> <span>Name</span>
+			</div>
+			<div class=inputbox>
+				<input TYPE="email" id=email autocomplete=off required> <span>Email</span>
+			</div>
+			<div class=inputbox>
+				<input TYPE="tel" id=mobile autocomplete=off required> <span>Mobile</span>
+			</div>
+			<div class=inputbox>
+				<input TYPE="number" id=aadhar size=14 autocomplete=off maxlength=999999999999
+					required> <span>Aadhar ID</span>
+			</div>
+			<div class=inputbox>
+				<input TYPE="text" autocomplete=off id=pan required
+					oninput="this.value = this.value.toUpperCase()"> <span>Pan
+					Number</span>
+			</div>
+			<div class=inputbox>
+				<input TYPE="text" id=accountType autocomplete=off required
+					oninput="this.value = this.value.toUpperCase()"> <span>Account
+					Type</span>
+			</div>
+			<div class=inputbox>
+				<input TYPE="text" autocomplete=off id=branch required
+					oninput="this.value = this.value.toUpperCase()"> <span>Branch</span>
+			</div>
+			<div class=inputbox>
+				<input TYPE="NUMBER" autocomplete=off id=deposit min=500 required> <span>Initial
+					Deposit</span>
+			</div>
+			<div>
+				<input class=actionbutton autocomplete=off type="submit" value="CREATE" name=button>
+			</div>
+		</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script>
+	$(".actionbutton").onclick(function(){
+		var obj ={"name":$("#name").val(),"email":$("#email").val(),"mobile":$("#mobile").val(),"pan":$("#pan").val()
+				,"aadhar":$("#aadhar").val(),"type":$("#accountType").val(),"branch":$("#branch").val(),"deposit":$("#deposit").val(),"button":"CREATE CUSTOMER"};
+	var json = JSON.stringify(obj);
+	$.ajax({
+		type : "POST",
+		url : "../BankServlet",
+		data : json,
+		success:function(response) {
+		}
+	});	
+	});
+	</script>
+</body>
+</html>

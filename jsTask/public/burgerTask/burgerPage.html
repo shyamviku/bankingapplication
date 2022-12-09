@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>ORDER BURGER</title>
+</head>
+<body>
+	<h2>WELCOME FOODIE</h2>
+	<div class=container>
+		<div id=content>
+			<button class=selectBurgerButton onclick="selectBurger(1)">BURGER
+				OF THE DAY</button>
+			<button class=selectBurgerButton onclick="selectBurger(2)">YOUR
+				OWN BURGER</button>
+			<button class=selectBurgerButton
+				onclick="location.href='burgerAd.html'">EXIT</button>
+		</div>
+	</div>
+	<script src="http://code.jquery.com/jquery-1.6.2.min.js"></script>
+	<script>
+		function selectBurger(x) {
+			if (x == 1) {
+				var crustArray = [ "HARD", "SOFT", "THIN" ];
+				var fillingArray = [ "PANEER TIKKA", "SOYA TIKKA",
+						"MUSHROOM TIKKA", "CHICKEN TIKKA", "TURKEY TIKKA" ];
+				var toppingArray = [ "TOMATO", "CABBAGE", "CUCUMBER",
+						"MEAT STRIP" ];
+				var crust = crustArray[Math.floor(Math.random()
+						* crustArray.length)];
+				var filling = fillingArray[Math.floor(Math.random()
+						* fillingArray.length)];
+				var topping = toppingArray[Math.floor(Math.random()
+						* toppingArray.length)];
+				var crustValue = 0;
+				var fillingValue = 0;
+				var toppingValue = 0;
+				if (crust === "THIN" || crust === "HARD") {
+					crustValue = 10;
+				} else if (crust === "SOFT") {
+					crustValue = 12;
+				}
+				if (filling === "PANEER TIKKA") {
+					fillingValue = 100;
+				} else if (filling === "SOYA TIKKA") {
+					fillingValue = 80;
+				} else if (filling === "MUSHROOM TIKKA") {
+					fillingValue = 110;
+				} else if (filling === "CHICKEN TIKKA") {
+					fillingValue = 120;
+				} else if (filling === "TURKEY TIKKA") {
+					fillingValue = 150;
+				}
+				if (topping === "TOMATO") {
+					toppingValue = 20;
+				} else if (topping === "CABBAGE") {
+					toppingValue = 20;
+				} else if (topping === "CUCUMBER") {
+					toppingValue = 25;
+				} else if (topping === "MEAT STRIP") {
+					toppingValue = 45;
+				}
+
+				$("#content").empty();
+				$("#content").append("<p>INVOICE</p>");
+				$("#content").append("<div id='crust'></div>");
+				$("#content").append("<div id='filling'></div>");
+				$("#content").append("<div id='topping'></div>");
+
+				$("#crust").append(crust + " " + crustValue);
+				$("#filling").append(filling + " " + fillingValue);
+				$("#topping").append(topping + " " + toppingValue);
+				var total = crustValue + fillingValue + toppingValue;
+				$("#topping").append(
+						"<div><span>TOTAL AMOUNT:" + total + "</span><div>");
+
+			} else if (x == 2) {
+				$("#content").empty();
+				var veg = $("<button>VEG BURGER</button>");
+				veg.attr("onclick", "preference(1)");
+				var nonVeg = $("<button>NON-VEG BURGER</button>");
+				nonVeg.attr("onclick", "preference(2)");
+				$("#content").append(veg, nonVeg);
+			}
+		}
+		function preference(x) {
+			if (x == 1) {
+				$("#content").empty();
+				$("#content").append("<form id='form'></form>");
+				$("#form").append("<p>SELECT THE CRUST");
+				var hard = "<input required type='radio' value='HARD' name='crust'><label>HARD - 10&#X20B9<label> ";
+				var thin = "<input required type='radio' value='THIN' name='crust'><label>THIN - 10&#X20B9<label> ";
+				var soft = "<input required type='radio' value='SOFT' name='crust'><label>SOFT - 12&#X20B9<label> ";
+				$("#form").append(thin, soft, hard);
+				$("#form").append("<span><p>SELECT THE FILING</span></p>");
+				var paneer = "<input required type='radio' value='PANEER TIKKA' name='filling'><label>PANEER TIKKA - 100&#X20B9<label> ";
+				var soya = "<input required type='radio' value='SOYA TIKKA' name='filling'><label>SOYA TIKKA - 80&#X20B9<label> ";
+				var mush = "<input required type='radio' value='MUSHROOM TIKKA' name='filling'><label>MUSHROOM TIKKA - 110&#X20B9 <label> ";
+				$("#form").append(paneer, soya, mush);
+				$("#form").append("<span><p>SELECT THE TOPPINGS</span></p>");
+				var cucumber = "<input  type='checkbox' value='CUCUMBER' name='cucumber'><label>CUCUMBER - 25&#X20B9<label> ";
+				var cabbage = "<input type='checkbox' value='CABBAGE' name='cabbage'><label>CABBAGE - 20&#X20B9<label> ";
+				var tomato = "<input  type='checkbox' value='TOMATO' name='tomato'><label>TOMATO - 20&#X20B9<label> ";
+				$("#form").append(cucumber, cabbage, tomato);
+				$("#form").append(
+						"<button onclick=checkOut()>CHECK OUT</button>");
+
+			} else {
+				$("#content").empty();
+				$("#content").append("<form id='form'></form>");
+				$("#form").append("<p>SELECT THE CRUST");
+				var thin = "<input  type='radio' value='THIN' name='crust'><label>THIN<label> ";
+				var soft = "<input required type='radio' value='SOFT' name='crust'><label>SOFT<label> ";
+				var hard = "<input required type='radio' value='HARD' name='crust'><label>HARD<label> ";
+				$("#form").append(thin, soft, hard);
+				$("#form").append("<p>SELECT THE FILING");
+				var paneer = "<input required type='radio' value='PANEER TIKKA' name='filling'><label>PANEER TIKKA - 100&#X20B9<label> ";
+				var soya = "<input required type='radio' value='SOYA TIKKA' name='filling'><label>SOYA TIKKA - 80&#X20B9<label> ";
+				var mush = "<input required type='radio' value='MUSHROOM TIKKA' name='filling'><label>MUSHROOM TIKKA - 110&#X20B9<label> ";
+				var chicken = "<input required type='radio' value='CHICKEN TIKKA' name='filling'><label>CHICKEN TIKKA - 120&#X20B9<label> ";
+				var turkey = "<input required type='radio' value='TURKEY TIKKA' name='filling'><label>TURKEY MEAT - 150&#X20B9<label> ";
+				$("#form").append(chicken, turkey, paneer, soya, mush);
+				$("#form").append("<span><p>SELECT THE TOPPINGS</span></p>");
+				var meat = "<input  type='checkbox' value='MEAT STRIP'  name='meat'><label>MEAT STRIP - 45&#X20B9<label> ";
+				var cucumber = "<input  type='checkbox' value='CUCUMBER' name='cucumber'><label>CUCUMBER - 25&#X20B9<label> ";
+				var cabbage = "<input  type='checkbox' value='CABBAGE' name='cabbage'><label>CABBAGE - 20&#X20B9<label> ";
+				var tomato = "<input  type='checkbox' value='TOMATO' name='tomato'><label>TOMATO - 20&#X20B9<label> ";
+				$("#form").append(meat, cucumber, cabbage, tomato);
+				$('input[type=checkbox]').change(function(limit) {
+					if ($('input[type=checkbox]:checked').length > 3) {
+						$(this).prop('checked', false)
+						alert("only 3 toppings allowed");
+					}
+				})
+				$("#form").append(
+						"<button onclick=checkOut()>CHECK OUT</button>");
+			}
+		}
+		function checkOut() {
+			var crust = $("input[name='crust']:checked").val();
+			var crustValue = 0;
+			var filling = $("input[name='filling']:checked").val();
+			var fillingValue = 0;
+			var meat = $("input[name='meat']:checked").val();
+			var meatValue = 0;
+			var cucumber = $("input[name='cucumber']:checked").val();
+			var cucumberValue = 25;
+			var cabbage = $("input[name='cabbage']:checked").val();
+			var cabbageValue = 25;
+			var tomato = $("input[name='tomato']:checked").val();
+			var tomatoValue = 20;
+			var toppingCount = 0;
+			if (crust === "THIN" || crust === "HARD") {
+				crustValue = 10;
+			} else if (crust === "SOFT") {
+				crustValue = 12;
+			}
+			if (filling === "PANEER TIKKA") {
+				fillingValue = 100;
+			} else if (filling === "SOYA TIKKA") {
+				fillingValue = 80;
+			} else if (filling === "MUSHROOM TIKKA") {
+				fillingValue = 110;
+			} else if (filling === "CHICKEN TIKKA") {
+				fillingValue = 120;
+			} else if (filling === "TURKEY TIKKA") {
+				fillingValue = 150;
+			}
+			if (meat) {
+				meatValue = 45;
+				toppingCount += 1;
+			} else {
+				meat = ""
+				meatValue = 0;
+
+			}
+			if (cabbage) {
+				cabbageValue = 20;
+				toppingCount += 1;
+			} else {
+				cabbage = ""
+				cabbageValue = 0;
+			}
+			if (tomato) {
+				tomatoValue = 20;
+				toppingCount += 1;
+			} else {
+				tomato = ""
+				tomatoValue = 0;
+
+			}
+			if (cucumber) {
+				cucumberValue = 25;
+				toppingCount += 1;
+			} else {
+				cucumber = ""
+				cucumberValue = 0;
+			}
+
+			$("#content").empty();
+			$("#content").append("<p>INVOICE</p>");
+			$("#content").append("<div id='crust'></div>");
+			$("#content").append("<div id='filling'></div>");
+			$("#content").append("<div id='topping'></div>");
+
+			$("#crust").append(
+					"<div>CRUST:" + crust + " " + crustValue + "&#X20B9</div>");
+			$("#filling").append(
+					"<div>FILLING:" + filling + " " + fillingValue
+							+ "&#X20B9</div>");
+			$("#topping").append(
+					"TOPPING:" + cucumber + " " + tomato + " " + cabbage + " "
+							+ meat);
+			if (toppingCount == 3) {
+				var priceArray = [ cucumberValue, tomatoValue, cabbageValue,
+						meatValue ];
+				var discount = priceArray.find(function(element) {
+					return element > 0;
+				});
+				var total = crustValue + fillingValue + cucumberValue
+						+ tomatoValue + cabbageValue + meatValue;
+				$("#topping").append(
+						"<div><span>TOTAL AMOUNT:" + total
+								+ "&#X20B9</span></div>");
+				$("#topping").append(
+						"<div><span>DISCOUNTED AMOUNT:" + (total - discount)
+								+ "&#X20B9</span></div>");
+			} else {
+				var total = crustValue + fillingValue + cucumberValue
+						+ tomatoValue + cabbageValue + meatValue;
+				$("#topping").append(
+						"<div><span>TOTAL AMOUNT:" + total
+								+ "&#X20B9</span></div>");
+			}
+		}
+	</script>
+</body>
+</html>

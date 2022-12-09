@@ -1,0 +1,102 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+</style>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<link rel=stylesheet type=text/css
+	href="../css/mainpage.css">
+<body>
+<div>
+	<span><p class=topic>TRANSACTIONS</p></span>
+	
+<label class="${hide1}" style=font-weight:bold>ACCOUNT</label>
+ <select class="${hide1} dropdownbox" id=select required>
+				
+		</select>
+		<button  class="show actionbutton" onclick=b() value="showtransaction" name=button>SHOW</button>
+		<input class=hide type=number name ="userId">	
+	<div class="tablewrapper">
+  <div class="tablediv">
+	<table class="contenttable ">
+	<thead>	<tr>
+			<th>ID</th>
+			<th>TYPE</th>
+			<th>FROM</th>
+			<th>AMOUNT</th>
+			<th>STATUS</th>
+			<th>TIME</th>
+			<th>CLOSING BALANCE</th>
+		</tr>
+		</thead>
+	</table>
+	</div>
+	</div>
+	</div>
+<script src="http://code.jquery.com/jquery-1.6.2.min.js"></script>
+	<script>
+	
+		$(document).ready(
+				function() {
+				
+					var obj = {
+						"button" : "viewTransaction","userid": $("#userid").val()
+					};
+					var myJSON = JSON.stringify(obj);
+
+					$.ajax({
+						type : "POST",
+						url : "../BankServlet",
+						data : myJSON,
+						success:function(response) {
+							var json = JSON.parse(response);
+							for(k in json.list){
+								$(".dropdownbox").append("<option value="+json.list[k]+">"+json.list[k]+"</option>");}
+						b();	
+						},
+						error : function() {
+							alert("error")
+						}
+					});
+				});
+		
+		function b(){
+			var obj = {
+					"acno" : $("#select").val(),"button" : "showTransaction"
+				};
+			var myJSON = JSON.stringify(obj);
+			$.ajax({
+				type : "POST",
+				url : "../BankServlet",
+				data : myJSON,
+				success : function(response) {
+					var json = JSON.parse(response);
+					console.log(json);
+					$(".del").empty();
+					for (k in json) {
+						var date = new Date(json[k].timeOfTransaction);
+						var time=date.toLocaleString(); 
+						$(".contenttable").append(
+								 "<tr class=del><td>" + k + "</td><td>"
+										+ json[k].typeOfTransaction
+										+ "</td><td>"
+										+ json[k].fromAccount
+										+ "</td><td>"
+										+ json[k].amount
+										+ "</td><td>"
+										+ json[k].transactionStatus
+										+ "</td><td> "
+										+ time
+										+ "</td><td> "
+										+ json[k].closingBalance
+										+ "</td></tr> ")
+					}
+				},
+		});
+	};
+	</script>
+</body>
+</html>

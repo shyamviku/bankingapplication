@@ -1,0 +1,48 @@
+@charset "ISO-8859-1";
+.adBody{background-image:url(../images/bg2.jpg);
+	background-size: 100% 100vh;
+	}
+div.container {
+    margin-left: 33%;
+    margin-top: 16%;
+}
+.adHeading{
+	margin: 2% 39%;
+  width: 35%;
+    font-size: 41px;
+    font-family: ui-monospace;
+    color: #ffffff;
+}
+.buttonDiv{
+	    margin: 10% 42%;
+	        width: 30%;
+}
+.orderNow{
+ 
+    width:15%;
+    font-size:30px;
+        border-radius: 60px;
+        border: none;
+        color: #eeeeee;
+        cursor: pointer;
+        font-family: sans-serif;
+        padding: 5px 15px;
+        text-decoration:none;
+        text-align: center;
+      animation: glowing 1300ms infinite;
+}
+
+ @keyframes glowing {
+        0% {
+          background-color: #2ba805;
+          box-shadow: 0 0 5px #2ba805;
+        }
+        50% {
+          background-color: #49e819;
+          box-shadow: 0 0 20px #49e819;
+        }
+        100% {
+          background-color: #2ba805;
+          box-shadow: 0 0 5px #2ba805;
+        }
+}

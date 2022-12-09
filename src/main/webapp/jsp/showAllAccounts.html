@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<link rel=stylesheet type=../css/mainpage.css>
+<body>
+	
+		<p CLASS=topic>ACCOUNTS</p>
+	
+	<div >
+		<table class=contenttable>
+			<tr>
+				<th>ID</th>
+				<th>ACCOUNT NUMBER</th>
+				<th>TYPE</th>
+				<th>BRANCH</th>
+				<th>STATUS</th>
+				<th>BALANCE</th>
+			</tr>
+		</table>
+	</div>
+	<script src="http://code.jquery.com/jquery-1.6.2.min.js"></script>
+	<script>
+		$(document).ready(
+				function() {
+
+					var obj = {
+						"button" : "showAllAccounts"
+					};
+					var myJSON = JSON.stringify(obj);
+
+					$.ajax({
+						type : "POST",
+						url : "../BankServlet",
+						data : myJSON,
+						success : function(response) {
+							var json = JSON.parse(response);
+							console.log(json);
+							for (k in json) {
+								var x=json[k];
+								console.log(x);
+								for(m in x){
+									console.log( x[m].accountType);
+								$(".contenttable").append(
+										"<tr><td>" + k
+												+ "</td><td>" + m + "</td><td>"
+												+ x[m].accountType
+												+ "</td><td>"
+												+ x[m].accountBranch
+												+ "</td><td>"
+												+ x[m].accountStatus
+												+ "</td><td>"
+												+ x[m].accountBalance
+												+ "</td></tr> ")
+							}
+						}},
+						error : function() {
+							alert("error")
+						}
+					});
+				});
+	</script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+.hide{
+visibility:hidden
+}
+</style>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<link rel=stylesheet type=text/css
+	href="/css/mainpage.css">
+<body>
+<DIV CLASS="${hide }">
+<table class=contenttable>
+<tr>
+<th>ID</th>
+<th>ACCOUNT NUMBER</th>
+<th>TYPE</th>
+<th>BRANCH</th>
+<th>STATUS</th>
+<th>BALANCE</th>
+</tr>
+
+</table>
+</DIV>
+<script src="http://code.jquery.com/jquery-1.6.2.min.js"></script>
+	<script>
+		$(document).ready(
+				function() {
+
+					var obj = {
+						"button" : "viewAccount","acno":$("#acno").val()
+					};
+					var myJSON = JSON.stringify(obj);
+
+					$.ajax({
+						type : "POST",
+						url : "../BankServlet",
+						data : myJSON,
+						success : function(response) {
+							var json = JSON.parse(response);
+							console.log(json);
+								$(".contenttable").append(
+										"<tr><td>" + json.userId
+												+ "</td><td>" + json.accountNumber + "</td><td>"
+												+ json.accountType
+												+ "</td><td>"
+												+ json.accountBranch
+												+ "</td><td>"
+												+ json.accountStatus
+												+ "</td><td>"
+												+ json.accountBalance
+												+ "</td></tr> ")
+							
+						},
+						error : function() {
+							alert("error")
+						}
+					});
+				});
+	</script>
+</body>
+</html>
